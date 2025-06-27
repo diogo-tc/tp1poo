@@ -4,50 +4,44 @@
 #include <vector>
 #include <string>
 #include "Aeronave.h"
-#include "Pessoa.h" // Inclui Piloto e Passageiro
+#include "Pessoa.h"
 #include "Voo.h"
-
-// using namespace std; // Removido. Continue usando std:: prefixado ou using declarações em .cpp
+using namespace std;
 
 class Sistema {
 private:
-    std::vector<Aeronave> aeronaves;
-    std::vector<Pessoa*> pessoas; // Pode conter Piloto* e Passageiro*
-    std::vector<Voo> voos;
+    vector<Aeronave> aeronaves;
+    vector<Pessoa*> pessoas;
+    vector<Voo> voos;
 
 public:
     Sistema();
-    ~Sistema(); // Destrutor para liberar memória de Pessoa*
+    ~Sistema();
 
-    // Cadastro
     void cadastrarAeronave(const Aeronave& aeronave);
     void cadastrarPiloto(const Piloto& piloto);
     void cadastrarPassageiro(const Passageiro& passageiro);
     void criarVoo(const Voo& voo);
 
-    // Associações
-    bool embarcarPassageiro(const std::string& codigoVoo, const std::string& cpf);
+    bool embarcarPassageiro(const string& codigoVoo, const string& cpf);
 
-    // Listagens
     void listarVoos() const;
-    void listarPassageirosDoVoo(const std::string& codigoVoo) const;
+    void listarPassageirosDoVoo(const string& codigoVoo) const;
 
-    // Persistência
     void salvarDados() const;
     void carregarDados();
 
-    // Buscas internas (retornam ponteiros para objetos gerenciados pelo Sistema)
-    // Versão não-const (para modificação)
-    Aeronave* buscarAeronave(const std::string& codigo);
-    Piloto* buscarPiloto(const std::string& matricula);
-    Passageiro* buscarPassageiro(const std::string& cpf);
-    Voo* buscarVoo(const std::string& codigo);
+    // Versões não-const (para modificação)
+    Aeronave* buscarAeronave(const string& codigo);
+    Piloto* buscarPiloto(const string& matricula);
+    Passageiro* buscarPassageiro(const string& cpf);
+    Voo* buscarVoo(const string& codigo);
 
-    // Versão const (para acesso somente leitura)
-    const Aeronave* buscarAeronave(const std::string& codigo) const;
-    const Piloto* buscarPiloto(const std::string& matricula) const;
-    const Passageiro* buscarPassageiro(const std::string& cpf) const;
-    const Voo* buscarVoo(const std::string& codigo) const;
+    // Versões const (para acesso somente leitura)
+    const Aeronave* buscarAeronave(const string& codigo) const;
+    const Piloto* buscarPiloto(const string& matricula) const;
+    const Passageiro* buscarPassageiro(const string& cpf) const;
+    const Voo* buscarVoo(const string& codigo) const;
 };
 
 #endif

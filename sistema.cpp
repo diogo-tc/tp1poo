@@ -1,10 +1,12 @@
 #include "Sistema.h"
-#include <fstream>     // Para std::ofstream, std::ifstream
-#include <iostream>    // Para std::cout, std::cerr, std::endl
-#include <algorithm>   // Para std::find_if
-#include <string>      // Para std::string
-#include <limits>      // Para std::numeric_limits
-#include <sstream>     // Adicionado novamente explicitamente para stringstream
+#include <fstream>
+#include <iostream>
+#include <algorithm>
+#include <string>
+#include <limits>
+#include <sstream> // Adicionado novamente explicitamente para stringstream
+
+using namespace std;
 
 // Construtor
 Sistema::Sistema() {
@@ -21,167 +23,157 @@ Sistema::~Sistema() {
 
 // Métodos de Cadastro
 void Sistema::cadastrarAeronave(const Aeronave& aeronave) {
-    // Verifica se já existe uma aeronave com o mesmo código
     if (buscarAeronave(aeronave.getCodigo())) { // Chama a versão const de buscarAeronave para verificar
-        std::cout << "Erro: Aeronave com código " << aeronave.getCodigo() << " já existe." << std::endl;
+        cout << "Erro: Aeronave com código " << aeronave.getCodigo() << " já existe." << endl;
         return;
     }
     aeronaves.push_back(aeronave);
-    std::cout << "Aeronave " << aeronave.getCodigo() << " cadastrada com sucesso." << std::endl;
+    cout << "Aeronave " << aeronave.getCodigo() << " cadastrada com sucesso." << endl;
 }
 
 void Sistema::cadastrarPiloto(const Piloto& piloto) {
-    // Verifica se já existe um piloto com a mesma matrícula
     if (buscarPiloto(piloto.getMatricula())) { // Chama a versão const de buscarPiloto para verificar
-        std::cout << "Erro: Piloto com matrícula " << piloto.getMatricula() << " já existe." << std::endl;
+        cout << "Erro: Piloto com matrícula " << piloto.getMatricula() << " já existe." << endl;
         return;
     }
-    pessoas.push_back(new Piloto(piloto)); // Adiciona uma cópia dinâmica
-    std::cout << "Piloto " << piloto.getNome() << " cadastrado com sucesso." << std::endl;
+    pessoas.push_back(new Piloto(piloto));
+    cout << "Piloto " << piloto.getNome() << " cadastrado com sucesso." << endl;
 }
 
 void Sistema::cadastrarPassageiro(const Passageiro& passageiro) {
-    // Verifica se já existe um passageiro com o mesmo CPF
     if (buscarPassageiro(passageiro.getCPF())) { // Chama a versão const de buscarPassageiro para verificar
-        std::cout << "Erro: Passageiro com CPF " << passageiro.getCPF() << " já existe." << std::endl;
+        cout << "Erro: Passageiro com CPF " << passageiro.getCPF() << " já existe." << endl;
         return;
     }
-    pessoas.push_back(new Passageiro(passageiro)); // Adiciona uma cópia dinâmica
-    std::cout << "Passageiro " << passageiro.getNome() << " cadastrado com sucesso." << std::endl;
+    pessoas.push_back(new Passageiro(passageiro));
+    cout << "Passageiro " << passageiro.getNome() << " cadastrado com sucesso." << endl;
 }
 
 void Sistema::criarVoo(const Voo& voo) {
-    // Verifica se o voo já existe
     if (buscarVoo(voo.getCodigo())) { // Chama a versão const de buscarVoo para verificar
-        std::cout << "Erro: Voo com código " << voo.getCodigo() << " já existe." << std::endl;
+        cout << "Erro: Voo com código " << voo.getCodigo() << " já existe." << endl;
         return;
     }
-
     voos.push_back(voo);
-    std::cout << "Voo " << voo.getCodigo() << " criado com sucesso." << std::endl;
+    cout << "Voo " << voo.getCodigo() << " criado com sucesso." << endl;
 }
 
-// Métodos de Associação
-bool Sistema::embarcarPassageiro(const std::string& codigoVoo, const std::string& cpf) {
+bool Sistema::embarcarPassageiro(const string& codigoVoo, const string& cpf) {
     Voo* voo = buscarVoo(codigoVoo); // Chama a versão não-const para poder modificar o voo
     Passageiro* passageiro = buscarPassageiro(cpf); // Chama a versão não-const
 
     if (!voo) {
-        std::cout << "Erro: Voo com código " << codigoVoo << " não encontrado." << std::endl;
+        cout << "Erro: Voo com código " << codigoVoo << " não encontrado." << endl;
         return false;
     }
     if (!passageiro) {
-        std::cout << "Erro: Passageiro com CPF " << cpf << " não encontrado." << std::endl;
+        cout << "Erro: Passageiro com CPF " << cpf << " não encontrado." << endl;
         return false;
     }
 
     if (voo->adicionarPassageiro(passageiro)) {
-        std::cout << "Passageiro " << passageiro->getNome() << " embarcado no voo " << voo->getCodigo() << " com sucesso." << std::endl;
+        cout << "Passageiro " << passageiro->getNome() << " embarcado no voo " << voo->getCodigo() << " com sucesso." << endl;
         return true;
     } else {
-        std::cout << "Erro: Não foi possível embarcar o passageiro no voo " << voo->getCodigo() << ". Capacidade máxima atingida ou outro erro." << std::endl;
+        cout << "Erro: Não foi possível embarcar o passageiro no voo " << voo->getCodigo() << ". Capacidade máxima atingida ou passageiro já embarcado." << endl;
         return false;
     }
 }
 
-// Métodos de Listagem
 void Sistema::listarVoos() const {
-    std::cout << "\n===== LISTAGEM DE VOOS =====" << std::endl;
+    cout << "\n===== LISTAGEM DE VOOS =====" << endl;
     if (voos.empty()) {
-        std::cout << "Nenhum voo cadastrado." << std::endl;
+        cout << "Nenhum voo cadastrado." << endl;
         return;
     }
-    for (const auto& voo : voos) { // Itera sobre voos const
-        std::cout << "Código do Voo: " << voo.getCodigo() << std::endl;
+    for (const auto& voo : voos) {
+        cout << "Código do Voo: " << voo.getCodigo() << endl;
         if (voo.getAeronave()) {
-            std::cout << "  Aeronave: " << voo.getAeronave()->getCodigo() << " (" << voo.getAeronave()->getModelo() << ")" << std::endl;
+            cout << "  Aeronave: " << voo.getAeronave()->getCodigo() << " (" << voo.getAeronave()->getModelo() << ")" << endl;
         } else {
-            std::cout << "  Aeronave: N/A" << std::endl;
+            cout << "  Aeronave: N/A" << endl;
         }
         if (voo.getComandante()) {
-            std::cout << "  Comandante: " << voo.getComandante()->getNome() << " (Matrícula: " << voo.getComandante()->getMatricula() << ")" << std::endl;
+            cout << "  Comandante: " << voo.getComandante()->getNome() << " (Matrícula: " << voo.getComandante()->getMatricula() << ")" << endl;
         } else {
-            std::cout << "  Comandante: N/A" << std::endl;
+            cout << "  Comandante: N/A" << endl;
         }
-        std::cout << "  Origem: " << voo.getOrigem() << std::endl;
-        std::cout << "  Destino: " << voo.getDestino() << std::endl;
-        std::cout << "  Número de Passageiros: " << voo.getPassageiros().size() << std::endl;
-        std::cout << "  Hora de Saída Prevista: " << voo.getHoraSaida() << std::endl;
-        std::cout << "  Tempo Estimado de Voo: " << voo.getTempoEstimado() << " horas (incluindo " << voo.getNumeroEscalas() << " escalas)" << std::endl;
-        std::cout << "------------------------------------" << std::endl;
+        cout << "  Origem: " << voo.getOrigem() << endl;
+        cout << "  Destino: " << voo.getDestino() << endl;
+        cout << "  Número de Passageiros: " << voo.getPassageiros().size() << endl;
+        cout << "  Hora de Saída Prevista: " << voo.getHoraSaida() << endl;
+        cout << "  Tempo Estimado de Voo: " << voo.getTempoEstimado() << " horas (incluindo " << voo.getNumeroEscalas() << " escalas)" << endl;
+        cout << "------------------------------------" << endl;
     }
 }
 
-void Sistema::listarPassageirosDoVoo(const std::string& codigoVoo) const {
+void Sistema::listarPassageirosDoVoo(const string& codigoVoo) const {
     const Voo* voo = buscarVoo(codigoVoo); // Chama a versão const de buscarVoo
     if (!voo) {
-        std::cout << "Erro: Voo com código " << codigoVoo << " não encontrado." << std::endl;
+        cout << "Erro: Voo com código " << codigoVoo << " não encontrado." << endl;
         return;
     }
-    voo->listarPassageiros(); // Delega a listagem para a classe Voo
+    voo->listarPassageiros();
 }
 
-// Métodos de Persistência
 void Sistema::salvarDados() const {
-    // Salvar aeronaves
-    std::ofstream arqAeronaves("aeronaves.csv");
+    ofstream arqAeronaves("aeronaves.csv");
     if (arqAeronaves.is_open()) {
         for (const auto& a : aeronaves) {
-            arqAeronaves << a.toCSV() << std::endl;
+            arqAeronaves << a.toCSV() << endl;
         }
         arqAeronaves.close();
-        std::cout << "Aeronaves salvas em aeronaves.csv" << std::endl;
+        cout << "Aeronaves salvas em aeronaves.csv" << endl;
     } else {
-        std::cerr << "Erro ao abrir aeronaves.csv para escrita." << std::endl;
+        cerr << "Erro ao abrir aeronaves.csv para escrita." << endl;
     }
 
-    // Salvar pessoas (pilotos e passageiros)
-    std::ofstream arqPessoas("pessoas.csv");
+    ofstream arqPessoas("pessoas.csv");
     if (arqPessoas.is_open()) {
         for (const auto& p : pessoas) {
-            arqPessoas << p->toCSV() << std::endl; // Polimorfismo aqui!
+            arqPessoas << p->toCSV() << endl;
         }
         arqPessoas.close();
-        std::cout << "Pessoas salvas em pessoas.csv" << std::endl;
+        cout << "Pessoas salvas em pessoas.csv" << endl;
     } else {
-        std::cerr << "Erro ao abrir pessoas.csv para escrita." << std::endl;
+        cerr << "Erro ao abrir pessoas.csv para escrita." << endl;
     }
 
-    // Salvar voos
-    std::ofstream arqVoos("voos.csv");
+    // Salvando voos com seus passageiros associados na mesma linha
+    ofstream arqVoos("voos.csv");
     if (arqVoos.is_open()) {
         for (const auto& v : voos) {
-            arqVoos << v.toCSV() << std::endl;
+            arqVoos << v.toCSV() << endl; // O Voo::toCSV() agora inclui os CPFs
         }
         arqVoos.close();
-        std::cout << "Voos salvos em voos.csv" << std::endl;
+        cout << "Voos (com passageiros) salvos em voos.csv" << endl;
     } else {
-        std::cerr << "Erro ao abrir voos.csv para escrita." << std::endl;
+        cerr << "Erro ao abrir voos.csv para escrita." << endl;
     }
 }
 
 void Sistema::carregarDados() {
     // Carregar aeronaves
-    std::ifstream arqAeronaves("aeronaves.csv");
+    ifstream arqAeronaves("aeronaves.csv");
     if (arqAeronaves.is_open()) {
-        std::string linha;
-        while (std::getline(arqAeronaves, linha)) {
+        string linha;
+        while (getline(arqAeronaves, linha)) {
             aeronaves.push_back(Aeronave::fromCSV(linha));
         }
         arqAeronaves.close();
-        std::cout << "Aeronaves carregadas de aeronaves.csv" << std::endl;
+        cout << "Aeronaves carregadas de aeronaves.csv" << endl;
     } else {
-        std::cerr << "Aviso: Nenhuma aeronaves.csv encontrada ou erro ao abrir. Criando nova." << std::endl;
+        cerr << "Aviso: Nenhuma aeronaves.csv encontrada ou erro ao abrir. Iniciando sem dados de aeronaves." << endl;
     }
 
     // Carregar pessoas (pilotos e passageiros)
-    std::ifstream arqPessoas("pessoas.csv");
+    ifstream arqPessoas("pessoas.csv");
     if (arqPessoas.is_open()) {
-        std::string linha;
-        while (std::getline(arqPessoas, linha)) {
-            std::stringstream ss(linha); // Corrigido: Agora std::stringstream está visível
-            std::string tipo;
-            std::getline(ss, tipo, ',');
+        string linha;
+        while (getline(arqPessoas, linha)) {
+            stringstream ss(linha);
+            string tipo;
+            getline(ss, tipo, ',');
             if (tipo == "Piloto") {
                 pessoas.push_back(new Piloto(Piloto::fromCSV(linha)));
             } else if (tipo == "Passageiro") {
@@ -189,50 +181,67 @@ void Sistema::carregarDados() {
             }
         }
         arqPessoas.close();
-        std::cout << "Pessoas carregadas de pessoas.csv" << std::endl;
+        cout << "Pessoas carregadas de pessoas.csv" << endl;
     } else {
-        std::cerr << "Aviso: Nenhuma pessoas.csv encontrada ou erro ao abrir. Criando nova." << std::endl;
+        cerr << "Aviso: Nenhuma pessoas.csv encontrada ou erro ao abrir. Iniciando sem dados de pessoas." << endl;
     }
 
-    // Carregar voos
-    std::ifstream arqVoos("voos.csv");
+    // Carregar voos e suas associações de passageiros
+    ifstream arqVoos("voos.csv");
     if (arqVoos.is_open()) {
-        std::string linha;
-        while (std::getline(arqVoos, linha)) {
-            std::stringstream ss(linha); // Corrigido: Agora std::stringstream está visível
-            std::string codigo, origem, destino, horaSaida, sDistancia;
-            std::string codAeronave, matComandante, matPrimeiroOficial;
+        string linha;
+        while (getline(arqVoos, linha)) {
+            stringstream ss(linha);
+            string codigo, origem, destino, horaSaida, sDistancia;
+            string codAeronave, matComandante, matPrimeiroOficial, cpfsPassageirosStr;
             double distancia;
 
-            std::getline(ss, codigo, ',');
-            std::getline(ss, origem, ',');
-            std::getline(ss, destino, ',');
-            std::getline(ss, sDistancia, ',');
-            distancia = std::stod(sDistancia);
-            std::getline(ss, horaSaida, ',');
-            std::getline(ss, codAeronave, ',');
-            std::getline(ss, matComandante, ',');
-            std::getline(ss, matPrimeiroOficial);
+            // Extrai os campos básicos do voo
+            getline(ss, codigo, ',');
+            getline(ss, origem, ',');
+            getline(ss, destino, ',');
+            getline(ss, sDistancia, ',');
+            distancia = stod(sDistancia);
+            getline(ss, horaSaida, ',');
+            getline(ss, codAeronave, ',');
+            getline(ss, matComandante, ',');
+            getline(ss, matPrimeiroOficial, ',');
+            getline(ss, cpfsPassageirosStr); // Captura a string de CPFs
 
-            Aeronave* a = buscarAeronave(codAeronave); // Chama a versão não-const
-            Piloto* c = buscarPiloto(matComandante);   // Chama a versão não-const
-            Piloto* po = buscarPiloto(matPrimeiroOficial); // Chama a versão não-const
+            Aeronave* a = buscarAeronave(codAeronave); // Usa a versão não-const para pegar ponteiros modificáveis
+            Piloto* c = buscarPiloto(matComandante);
+            Piloto* po = buscarPiloto(matPrimeiroOficial);
 
             if (a && c && po) {
-                voos.push_back(Voo(codigo, origem, destino, distancia, horaSaida, a, c, po));
+                Voo novoVoo(codigo, origem, destino, distancia, horaSaida, a, c, po);
+
+                // Reassociar passageiros do voo
+                if (!cpfsPassageirosStr.empty()) {
+                    stringstream ssCpfs(cpfsPassageirosStr);
+                    string cpfIndividual;
+                    while (getline(ssCpfs, cpfIndividual, ';')) { // Delimita por ';'
+                        Passageiro* p = buscarPassageiro(cpfIndividual);
+                        if (p) {
+                            novoVoo.adicionarPassageiro(p); // Adiciona o passageiro ao voo
+                        } else {
+                            cerr << "Aviso: Passageiro com CPF " << cpfIndividual << " para o voo " << codigo << " não encontrado durante o carregamento. (Pode ter sido removido do pessoas.csv)" << endl;
+                        }
+                    }
+                }
+                voos.push_back(novoVoo);
             } else {
-                std::cerr << "Aviso: Não foi possível carregar voo " << codigo << " devido a dados ausentes de aeronave (" << codAeronave << ") ou pilotos (" << matComandante << ", " << matPrimeiroOficial << ")." << std::endl;
+                cerr << "Aviso: Não foi possível carregar voo " << codigo << " devido a dados ausentes de aeronave (" << codAeronave << ") ou pilotos (" << matComandante << ", " << matPrimeiroOficial << "). Este voo será ignorado." << endl;
             }
         }
         arqVoos.close();
-        std::cout << "Voos carregados de voos.csv" << std::endl;
+        cout << "Voos (com passageiros) carregados de voos.csv" << endl;
     } else {
-        std::cerr << "Aviso: Nenhuma voos.csv encontrada ou erro ao abrir. Criando nova." << std::endl;
+        cerr << "Aviso: Nenhuma voos.csv encontrada ou erro ao abrir. Iniciando sem dados de voos." << endl;
     }
 }
 
-// Métodos de Busca Interna (não-const)
-Aeronave* Sistema::buscarAeronave(const std::string& codigo) {
+// Métodos de Busca Interna (não-const) - para modificação
+Aeronave* Sistema::buscarAeronave(const string& codigo) {
     for (auto& a : aeronaves) {
         if (a.getCodigo() == codigo) {
             return &a;
@@ -241,7 +250,7 @@ Aeronave* Sistema::buscarAeronave(const std::string& codigo) {
     return nullptr;
 }
 
-Piloto* Sistema::buscarPiloto(const std::string& matricula) {
+Piloto* Sistema::buscarPiloto(const string& matricula) {
     for (auto& p : pessoas) {
         Piloto* piloto = dynamic_cast<Piloto*>(p);
         if (piloto && piloto->getMatricula() == matricula) {
@@ -251,7 +260,7 @@ Piloto* Sistema::buscarPiloto(const std::string& matricula) {
     return nullptr;
 }
 
-Passageiro* Sistema::buscarPassageiro(const std::string& cpf) {
+Passageiro* Sistema::buscarPassageiro(const string& cpf) {
     for (auto& p : pessoas) {
         Passageiro* passageiro = dynamic_cast<Passageiro*>(p);
         if (passageiro && passageiro->getCPF() == cpf) {
@@ -261,7 +270,7 @@ Passageiro* Sistema::buscarPassageiro(const std::string& cpf) {
     return nullptr;
 }
 
-Voo* Sistema::buscarVoo(const std::string& codigo) {
+Voo* Sistema::buscarVoo(const string& codigo) {
     for (auto& v : voos) {
         if (v.getCodigo() == codigo) {
             return &v;
@@ -270,9 +279,9 @@ Voo* Sistema::buscarVoo(const std::string& codigo) {
     return nullptr;
 }
 
-// Métodos de Busca Interna (const)
-const Aeronave* Sistema::buscarAeronave(const std::string& codigo) const {
-    for (const auto& a : aeronaves) { // Itera sobre Aeronaves const
+// Métodos de Busca Interna (const) - para acesso somente leitura
+const Aeronave* Sistema::buscarAeronave(const string& codigo) const {
+    for (const auto& a : aeronaves) {
         if (a.getCodigo() == codigo) {
             return &a;
         }
@@ -280,9 +289,9 @@ const Aeronave* Sistema::buscarAeronave(const std::string& codigo) const {
     return nullptr;
 }
 
-const Piloto* Sistema::buscarPiloto(const std::string& matricula) const {
-    for (const auto& p : pessoas) { // Itera sobre Pessoa* const
-        const Piloto* piloto = dynamic_cast<const Piloto*>(p); // Downcast para const Piloto*
+const Piloto* Sistema::buscarPiloto(const string& matricula) const {
+    for (const auto& p : pessoas) {
+        const Piloto* piloto = dynamic_cast<const Piloto*>(p);
         if (piloto && piloto->getMatricula() == matricula) {
             return piloto;
         }
@@ -290,9 +299,9 @@ const Piloto* Sistema::buscarPiloto(const std::string& matricula) const {
     return nullptr;
 }
 
-const Passageiro* Sistema::buscarPassageiro(const std::string& cpf) const {
-    for (const auto& p : pessoas) { // Itera sobre Pessoa* const
-        const Passageiro* passageiro = dynamic_cast<const Passageiro*>(p); // Downcast para const Passageiro*
+const Passageiro* Sistema::buscarPassageiro(const string& cpf) const {
+    for (const auto& p : pessoas) {
+        const Passageiro* passageiro = dynamic_cast<const Passageiro*>(p);
         if (passageiro && passageiro->getCPF() == cpf) {
             return passageiro;
         }
@@ -300,8 +309,8 @@ const Passageiro* Sistema::buscarPassageiro(const std::string& cpf) const {
     return nullptr;
 }
 
-const Voo* Sistema::buscarVoo(const std::string& codigo) const {
-    for (const auto& v : voos) { // Itera sobre Voos const
+const Voo* Sistema::buscarVoo(const string& codigo) const {
+    for (const auto& v : voos) {
         if (v.getCodigo() == codigo) {
             return &v;
         }

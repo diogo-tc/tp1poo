@@ -2,64 +2,64 @@
 #define PESSOA_H
 
 #include <string>
-// using namespace std; // Removido
+using namespace std;
 
 class Pessoa {
 protected:
-    std::string nome;
+    string nome;
 
 public:
     Pessoa();
-    Pessoa(const std::string& nome);
+    Pessoa(const string& nome);
 
     virtual ~Pessoa() = default;
 
-    std::string getNome() const;
-    void setNome(const std::string& nome);
+    string getNome() const;
+    void setNome(const string& nome);
 
-    virtual std::string toCSV() const = 0;
+    virtual string toCSV() const = 0;
 };
 
 class Piloto : public Pessoa {
 private:
-    std::string matricula;
-    std::string breve;
+    string matricula;
+    string breve;
     double horasVoo;
 
 public:
     Piloto();
-    Piloto(const std::string& nome, const std::string& matricula, const std::string& breve, double horasVoo);
+    Piloto(const string& nome, const string& matricula, const string& breve, double horasVoo);
 
-    std::string getMatricula() const;
-    void setMatricula(const std::string& matricula);
+    string getMatricula() const;
+    void setMatricula(const string& matricula);
 
-    std::string getBreve() const;
-    void setBreve(const std::string& breve);
+    string getBreve() const;
+    void setBreve(const string& breve);
 
     double getHorasVoo() const;
     void setHorasVoo(double horas);
 
-    std::string toCSV() const override;
-    static Piloto fromCSV(const std::string& linha);
+    string toCSV() const override;
+    static Piloto fromCSV(const string& linha);
 };
 
 class Passageiro : public Pessoa {
 private:
-    std::string cpf;
-    std::string bilhete;
+    string cpf;
+    string bilhete;
 
 public:
     Passageiro();
-    Passageiro(const std::string& nome, const std::string& cpf, const std::string& bilhete);
+    Passageiro(const string& nome, const string& cpf, const string& bilhete);
 
-    std::string getCPF() const;
-    void setCPF(const std::string& cpf);
+    string getCPF() const;
+    void setCPF(const string& cpf);
 
-    std::string getBilhete() const;
-    void setBilhete(const std::string& bilhete);
+    string getBilhete() const;
+    void setBilhete(const string& bilhete);
 
-    std::string toCSV() const override;
-    static Passageiro fromCSV(const std::string& linha);
+    string toCSV() const override;
+    static Passageiro fromCSV(const string& linha);
 };
 
 #endif
