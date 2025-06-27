@@ -1,5 +1,9 @@
 #include "Pessoa.h"
-#include <sstream>
+#include <sstream>     // Necessário para stringstream
+#include <stdexcept>   // Necessário para stod (para horasVoo)
+#include <iostream>
+
+using namespace std;
 
 // Implementação da classe Pessoa
 Pessoa::Pessoa() : nome("") {}
@@ -53,14 +57,21 @@ string Piloto::toCSV() const {
 Piloto Piloto::fromCSV(const string& linha) {
     stringstream ss(linha);
     string tipo, nome, matricula, breve, sHorasVoo;
-    double horasVoo;
+    double horasVoo = 0.0; // Inicializa com valor padrão
 
     getline(ss, tipo, ','); // Ignora o tipo "Piloto"
     getline(ss, nome, ',');
     getline(ss, matricula, ',');
     getline(ss, breve, ',');
-    getline(ss, sHorasVoo, ',');
-    horasVoo = stod(sHorasVoo);
+    getline(ss, sHorasVoo); // Lê as horas de voo até o final da linha
+
+    try {
+        horasVoo = stod(sHorasVoo);
+    } catch (const invalid_argument& e) {
+        cerr << "Erro de conversão de horas de voo para Piloto do CSV: " << e.what() << endl;
+    } catch (const out_of_range& e) {
+        cerr << "Erro de faixa para horas de voo para Piloto do CSV: " << e.what() << endl;
+    }
 
     return Piloto(nome, matricula, breve, horasVoo);
 }
@@ -100,7 +111,7 @@ Passageiro Passageiro::fromCSV(const string& linha) {
     getline(ss, tipo, ','); // Ignora o tipo "Passageiro"
     getline(ss, nome, ',');
     getline(ss, cpf, ',');
-    getline(ss, bilhete, ',');
+    getline(ss, bilhete);
 
     return Passageiro(nome, cpf, bilhete);
 }

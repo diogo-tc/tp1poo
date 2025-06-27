@@ -1,12 +1,12 @@
 #include "Voo.h"
-#include <sstream> // Para toCSV e fromCSV
-#include <iostream> // Para listarPassageiros
+#include <sstream>     // Para std::stringstream
+#include <iostream>    // Para std::cout, std::endl
 
 // Construtor padrão
 Voo::Voo() : distancia(0.0), aeronave(nullptr), comandante(nullptr), primeiroOficial(nullptr), numeroEscalas(0), tempoEstimado(0.0) {}
 
 // Construtor com parâmetros
-Voo::Voo(const string& codigo, const string& origem, const string& destino, double distancia, const string& horaSaida,
+Voo::Voo(const std::string& codigo, const std::string& origem, const std::string& destino, double distancia, const std::string& horaSaida,
          Aeronave* aeronave, Piloto* comandante, Piloto* primeiroOficial)
     : codigo(codigo), origem(origem), destino(destino), distancia(distancia), horaSaida(horaSaida),
       aeronave(aeronave), comandante(comandante), primeiroOficial(primeiroOficial) {
@@ -14,27 +14,27 @@ Voo::Voo(const string& codigo, const string& origem, const string& destino, doub
 }
 
 // Getters e Setters
-string Voo::getCodigo() const {
+std::string Voo::getCodigo() const {
     return codigo;
 }
 
-void Voo::setCodigo(const string& codigo) {
+void Voo::setCodigo(const std::string& codigo) {
     this->codigo = codigo;
 }
 
-string Voo::getOrigem() const {
+std::string Voo::getOrigem() const {
     return origem;
 }
 
-void Voo::setOrigem(const string& origem) {
+void Voo::setOrigem(const std::string& origem) {
     this->origem = origem;
 }
 
-string Voo::getDestino() const {
+std::string Voo::getDestino() const {
     return destino;
 }
 
-void Voo::setDestino(const string& destino) {
+void Voo::setDestino(const std::string& destino) {
     this->destino = destino;
 }
 
@@ -47,11 +47,11 @@ void Voo::setDistancia(double distancia) {
     calcularEscalasETempo(); // Recalcular ao mudar a distância
 }
 
-string Voo::getHoraSaida() const {
+std::string Voo::getHoraSaida() const {
     return horaSaida;
 }
 
-void Voo::setHoraSaida(const string& hora) {
+void Voo::setHoraSaida(const std::string& hora) {
     this->horaSaida = hora;
 }
 
@@ -88,12 +88,12 @@ void Voo::setPrimeiroOficial(Piloto* oficial) {
     this->primeiroOficial = oficial;
 }
 
-const vector<Passageiro*>& Voo::getPassageiros() const {
+const std::vector<Passageiro*>& Voo::getPassageiros() const {
     return passageiros;
 }
 
 bool Voo::adicionarPassageiro(Passageiro* passageiro) {
-    [cite_start]// Verificar se a aeronave tem capacidade para mais passageiros [cite: 16]
+    // Verificar se a aeronave tem capacidade para mais passageiros [: 16]
     if (aeronave && passageiros.size() < aeronave->getCapacidade()) {
         passageiros.push_back(passageiro);
         return true;
@@ -103,28 +103,28 @@ bool Voo::adicionarPassageiro(Passageiro* passageiro) {
 
 void Voo::calcularEscalasETempo() {
     if (aeronave) {
-        [cite_start]// Calcular número de escalas com base na distância do voo e na autonomia da Aeronave [cite: 14]
-        if (aeronave->getAutonomiaVoo() > 0) {
-            numeroEscalas = static_cast<int>(distancia / aeronave->getAutonomiaVoo());
+        // Calcular número de escalas com base na distância do voo e na autonomia da Aeronave [: 14]
+        if (aeronave->getAutonomia() > 0) { // Alterado para getAutonomia()
+            numeroEscalas = static_cast<int>(distancia / aeronave->getAutonomia());
         } else {
-            numeroEscalas = 0; // Se autonomia for 0, não há escalas (ou erro)
+            numeroEscalas = 0;
         }
 
-        [cite_start]// Calcular tempo estimado de voo com base na distância e na velocidade da Aeronave [cite: 15]
+        // Calcular tempo estimado de voo com base na distância e na velocidade da Aeronave [: 15]
         if (aeronave->getVelocidadeMedia() > 0) {
             tempoEstimado = distancia / aeronave->getVelocidadeMedia();
         } else {
-            tempoEstimado = 0.0; // Se velocidade for 0, tempo é indefinido (ou erro)
+            tempoEstimado = 0.0;
         }
-        tempoEstimado += (numeroEscalas * 1.0); [cite_start]// cada escala leva 1 hora [cite: 15]
+        tempoEstimado += (numeroEscalas * 1.0); // cada escala leva 1 hora [: 15]
     } else {
         numeroEscalas = 0;
         tempoEstimado = 0.0;
     }
 }
 
-string Voo::toCSV() const {
-    stringstream ss;
+std::string Voo::toCSV() const {
+    std::stringstream ss;
     ss << codigo << ","
        << origem << ","
        << destino << ","
@@ -150,27 +150,30 @@ string Voo::toCSV() const {
     return ss.str();
 }
 
-Voo Voo::fromCSV(const string& linha) {
+Voo Voo::fromCSV(const std::string& linha) {
     // Esta função precisaria de um mecanismo para buscar Aeronaves e Pilotos existentes
     // pelo código/matrícula. Por simplicidade, este é um esqueleto.
     // A implementação completa dependeria da classe Sistema ou de um gerenciador de dados.
-    stringstream ss(linha);
-    string codigo, origem, destino, horaSaida, codAeronave, matComandante, matPrimeiroOficial, sDistancia;
+    std::stringstream ss(linha);
+    std::string codigo, origem, destino, horaSaida, sDistancia;
+    std::string codAeronave, matComandante, matPrimeiroOficial;
     double distancia;
 
-    getline(ss, codigo, ',');
-    getline(ss, origem, ',');
-    getline(ss, destino, ',');
-    getline(ss, sDistancia, ',');
-    distancia = stod(sDistancia);
-    getline(ss, horaSaida, ',');
-    getline(ss, codAeronave, ',');
-    getline(ss, matComandante, ',');
-    getline(ss, matPrimeiroOficial, ',');
+    std::getline(ss, codigo, ',');
+    std::getline(ss, origem, ',');
+    std::getline(ss, destino, ',');
+    std::getline(ss, sDistancia, ',');
+    distancia = std::stod(sDistancia);
+    std::getline(ss, horaSaida, ',');
+    std::getline(ss, codAeronave, ',');
+    std::getline(ss, matComandante, ',');
+    std::getline(ss, matPrimeiroOficial); // Lê até o final da linha
 
     // No contexto real, você precisaria de uma forma de obter ponteiros para
     // Aeronave, Piloto e Passageiro a partir dos códigos/matrículas.
-    // Isso geralmente é feito através de um "repositório" ou mapa na classe Sistema.
+    // Isso é feito na classe Sistema. Para o fromCSV de Voo, estamos criando
+    // um Voo "vazio" no que diz respeito aos ponteiros reais,
+    // e o Sistema os preencherá.
     Aeronave* a = nullptr; // Placeholder
     Piloto* c = nullptr;   // Placeholder
     Piloto* po = nullptr;  // Placeholder
@@ -181,13 +184,19 @@ Voo Voo::fromCSV(const string& linha) {
 }
 
 void Voo::listarPassageiros() const {
-    cout << "Passageiros do Voo " << codigo << " (" << origem << " -> " << destino << "):" << endl;
+    std::cout << "Passageiros do Voo " << codigo << " (" << origem << " -> " << destino << "):" << std::endl;
+    if (aeronave) {
+        std::cout << "Aeronave: " << aeronave->getCodigo() << " (" << aeronave->getModelo() << ")" << std::endl; // [: 17]
+    } else {
+        std::cout << "Aeronave: N/A" << std::endl;
+    }
+
     if (passageiros.empty()) {
-        cout << "Nenhum passageiro embarcado neste voo." << endl;
+        std::cout << "Nenhum passageiro embarcado neste voo." << std::endl;
     } else {
         for (const auto& p : passageiros) {
-            [cite_start]// Ao informar o código do voo, exibir o código e o modelo da aeronave, o nome de cada passageiro no voo. [cite: 17]
-            cout << "- " << p->getNome() << " (CPF: " << p->getCPF() << ", Bilhete: " << p->getNumeroBilhete() << ")" << endl;
+            // Ao informar o código do voo, exibir o código e o modelo da aeronave, o nome de cada passageiro no voo. [: 17]
+            std::cout << "- " << p->getNome() << " (CPF: " << p->getCPF() << ", Bilhete: " << p->getBilhete() << ")" << std::endl; // Corrigido para getBilhete()
         }
     }
 }

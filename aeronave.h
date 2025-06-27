@@ -1,28 +1,31 @@
 #ifndef AERONAVE_H
 #define AERONAVE_H
-using namespace std;
-
 
 #include <string>
 
+// Recomenda-se não usar 'using namespace std;' em headers.
+// Se realmente quiser, adicione-o apenas nos arquivos .cpp
+// ou use 'std::string', 'std::vector' etc. explicitamente.
+// using namespace std; // Removido para evitar poluição de namespace
+
 class Aeronave {
 private:
-    string codigo;
-    string modelo;
+    std::string codigo;
+    std::string modelo;
     int capacidade;
     double velocidadeMedia;
     double autonomia; // em milhas
 
 public:
     Aeronave();
-    Aeronave(const string& codigo, const string& modelo, int capacidade, double velocidadeMedia, double autonomia);
+    Aeronave(const std::string& codigo, const std::string& modelo, int capacidade, double velocidadeMedia, double autonomia);
 
     // Getters e Setters
-    string getCodigo() const;
-    void setCodigo(const string& codigo);
+    std::string getCodigo() const;
+    void setCodigo(const std::string& codigo);
 
-    string getModelo() const;
-    void setModelo(const string& modelo);
+    std::string getModelo() const;
+    void setModelo(const std::string& modelo);
 
     int getCapacidade() const;
     void setCapacidade(int capacidade);
@@ -34,8 +37,8 @@ public:
     void setAutonomia(double autonomia);
 
     // Serialização para CSV
-    string toCSV() const;
-    static Aeronave fromCSV(const string& linha);
+    std::string toCSV() const;
+    static Aeronave fromCSV(const std::string& linha);
 };
 
 #endif
