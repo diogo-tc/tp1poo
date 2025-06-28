@@ -6,7 +6,7 @@ using namespace std;
 
 class Aeronave {
 private:
-    string codigo;
+    string codigo;    
     string modelo;
     int capacidade;
     double velocidadeMedia;

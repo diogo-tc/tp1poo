@@ -15,7 +15,7 @@ Voo::Voo(const string& codigo, const string& origem, const string& destino, doub
 }
 
 // Getters e Setters
-string Voo::getCodigo() const {
+string Voo::getCodigo() const {  
     return codigo;
 }
 

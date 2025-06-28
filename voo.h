@@ -9,7 +9,7 @@ using namespace std;
 
 class Voo {
 private:
-    string codigo;
+    string codigo;   
     string origem;
     string destino;
     double distancia; // em milhas

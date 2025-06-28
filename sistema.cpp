@@ -5,7 +5,7 @@
 #include <string>      // Para string
 #include <limits>      // Para numeric_limits
 #include <sstream>     // Adicionado novamente explicitamente para stringstream
-using namespace std;
+using namespace std;  
 
 // Construtor
 Sistema::Sistema() {
