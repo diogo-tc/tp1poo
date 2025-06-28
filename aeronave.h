@@ -2,7 +2,6 @@
 #define AERONAVE_H
 
 #include <string>
-
 using namespace std;
 
 class Aeronave {

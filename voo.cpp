@@ -1,7 +1,6 @@
 #include "Voo.h"
-#include <sstream>
-#include <iostream>
-#include <stdexcept> // Para stod
+#include <sstream>     // Para stringstream
+#include <iostream>    // Para cout, endl
 using namespace std;
 
 // Construtor padrão
@@ -95,14 +94,8 @@ const vector<Passageiro*>& Voo::getPassageiros() const {
 }
 
 bool Voo::adicionarPassageiro(Passageiro* passageiro) {
+    // Verificar se a aeronave tem capacidade para mais passageiros [: 16]
     if (aeronave && passageiros.size() < aeronave->getCapacidade()) {
-        // Verificar se o passageiro já está no voo para evitar duplicatas
-        for (const auto& p : passageiros) {
-            if (p && passageiro && p->getCPF() == passageiro->getCPF()) {
-                cout << "Passageiro com CPF " << passageiro->getCPF() << " já está neste voo." << endl;
-                return false;
-            }
-        }
         passageiros.push_back(passageiro);
         return true;
     }
@@ -111,25 +104,26 @@ bool Voo::adicionarPassageiro(Passageiro* passageiro) {
 
 void Voo::calcularEscalasETempo() {
     if (aeronave) {
-        if (aeronave->getAutonomia() > 0) {
+        // Calcular número de escalas com base na distância do voo e na autonomia da Aeronave [: 14]
+        if (aeronave->getAutonomia() > 0) { // Alterado para getAutonomia()
             numeroEscalas = static_cast<int>(distancia / aeronave->getAutonomia());
         } else {
             numeroEscalas = 0;
         }
 
+        // Calcular tempo estimado de voo com base na distância e na velocidade da Aeronave [: 15]
         if (aeronave->getVelocidadeMedia() > 0) {
             tempoEstimado = distancia / aeronave->getVelocidadeMedia();
         } else {
             tempoEstimado = 0.0;
         }
-        tempoEstimado += (numeroEscalas * 1.0); 
+        tempoEstimado += (numeroEscalas * 1.0); // cada escala leva 1 hora [: 15]
     } else {
         numeroEscalas = 0;
         tempoEstimado = 0.0;
     }
 }
 
-// MODIFICADO: Adiciona CPFs dos passageiros ao final da linha CSV
 string Voo::toCSV() const {
     stringstream ss;
     ss << codigo << ","
@@ -154,25 +148,16 @@ string Voo::toCSV() const {
     } else {
         ss << "N/A";
     }
-
-    // Adicionar CPFs dos passageiros, separados por ponto e vírgula
-    ss << ","; // Separador para a lista de passageiros
-    for (size_t i = 0; i < passageiros.size(); ++i) {
-        if (passageiros[i]) {
-            ss << passageiros[i]->getCPF();
-            if (i < passageiros.size() - 1) {
-                ss << ";"; // Usar ponto e vírgula como delimitador entre CPFs
-            }
-        }
-    }
     return ss.str();
 }
 
-// fromCSV de Voo é um parser BÁSICO, Sistema fará as associações reais.
 Voo Voo::fromCSV(const string& linha) {
+    // Esta função precisaria de um mecanismo para buscar Aeronaves e Pilotos existentes
+    // pelo código/matrícula. Por simplicidade, este é um esqueleto.
+    // A implementação completa dependeria da classe Sistema ou de um gerenciador de dados.
     stringstream ss(linha);
     string codigo, origem, destino, horaSaida, sDistancia;
-    string codAeronave, matComandante, matPrimeiroOficial, cpfsPassageirosStr; // cpfsPassageirosStr para capturar a parte dos CPFs
+    string codAeronave, matComandante, matPrimeiroOficial;
     double distancia;
 
     getline(ss, codigo, ',');
@@ -183,26 +168,26 @@ Voo Voo::fromCSV(const string& linha) {
     getline(ss, horaSaida, ',');
     getline(ss, codAeronave, ',');
     getline(ss, matComandante, ',');
-    getline(ss, matPrimeiroOficial, ','); // Lê até a vírgula antes dos CPFs
-    getline(ss, cpfsPassageirosStr); // Lê o restante da linha para os CPFs
+    getline(ss, matPrimeiroOficial); // Lê até o final da linha
 
-    // Voo::fromCSV não tem acesso ao Sistema para buscar objetos reais.
-    // Ele apenas cria um objeto Voo com as informações básicas.
-    // A associação dos ponteiros de Aeronave/Piloto e passageiros será feita
-    // posteriormente na função Sistema::carregarDados().
-    Aeronave* a = nullptr;
-    Piloto* c = nullptr;
-    Piloto* po = nullptr;
+    // No contexto real, você precisaria de uma forma de obter ponteiros para
+    // Aeronave, Piloto e Passageiro a partir dos códigos/matrículas.
+    // Isso é feito na classe Sistema. Para o fromCSV de Voo, estamos criando
+    // um Voo "vazio" no que diz respeito aos ponteiros reais,
+    // e o Sistema os preencherá.
+    Aeronave* a = nullptr; // Placeholder
+    Piloto* c = nullptr;   // Placeholder
+    Piloto* po = nullptr;  // Placeholder
 
     Voo v(codigo, origem, destino, distancia, horaSaida, a, c, po);
-    v.calcularEscalasETempo();
+    v.calcularEscalasETempo(); // Garante que escalas e tempo sejam calculados ao carregar
     return v;
 }
 
 void Voo::listarPassageiros() const {
     cout << "Passageiros do Voo " << codigo << " (" << origem << " -> " << destino << "):" << endl;
     if (aeronave) {
-        cout << "Aeronave: " << aeronave->getCodigo() << " (" << aeronave->getModelo() << ")" << endl;
+        cout << "Aeronave: " << aeronave->getCodigo() << " (" << aeronave->getModelo() << ")" << endl; // [: 17]
     } else {
         cout << "Aeronave: N/A" << endl;
     }
@@ -211,7 +196,8 @@ void Voo::listarPassageiros() const {
         cout << "Nenhum passageiro embarcado neste voo." << endl;
     } else {
         for (const auto& p : passageiros) {
-            cout << "- " << p->getNome() << " (CPF: " << p->getCPF() << ", Bilhete: " << p->getBilhete() << ")" << endl;
+            // Ao informar o código do voo, exibir o código e o modelo da aeronave, o nome de cada passageiro no voo. [: 17]
+            cout << "- " << p->getNome() << " (CPF: " << p->getCPF() << ", Bilhete: " << p->getBilhete() << ")" << endl; // Corrigido para getBilhete()
         }
     }
 }

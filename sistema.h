@@ -4,40 +4,46 @@
 #include <vector>
 #include <string>
 #include "Aeronave.h"
-#include "Pessoa.h"
+#include "Pessoa.h" // Inclui Piloto e Passageiro
 #include "Voo.h"
+
 using namespace std;
 
 class Sistema {
 private:
     vector<Aeronave> aeronaves;
-    vector<Pessoa*> pessoas;
+    vector<Pessoa*> pessoas; // Pode conter Piloto* e Passageiro*
     vector<Voo> voos;
 
 public:
     Sistema();
-    ~Sistema();
+    ~Sistema(); // Destrutor para liberar memória de Pessoa*
 
+    // Cadastro
     void cadastrarAeronave(const Aeronave& aeronave);
     void cadastrarPiloto(const Piloto& piloto);
     void cadastrarPassageiro(const Passageiro& passageiro);
     void criarVoo(const Voo& voo);
 
+    // Associações
     bool embarcarPassageiro(const string& codigoVoo, const string& cpf);
 
+    // Listagens
     void listarVoos() const;
     void listarPassageirosDoVoo(const string& codigoVoo) const;
 
+    // Persistência
     void salvarDados() const;
     void carregarDados();
 
-    // Versões não-const (para modificação)
+    // Buscas internas (retornam ponteiros para objetos gerenciados pelo Sistema)
+    // Versão não-const (para modificação)
     Aeronave* buscarAeronave(const string& codigo);
     Piloto* buscarPiloto(const string& matricula);
     Passageiro* buscarPassageiro(const string& cpf);
     Voo* buscarVoo(const string& codigo);
 
-    // Versões const (para acesso somente leitura)
+    // Versão const (para acesso somente leitura)
     const Aeronave* buscarAeronave(const string& codigo) const;
     const Piloto* buscarPiloto(const string& matricula) const;
     const Passageiro* buscarPassageiro(const string& cpf) const;
