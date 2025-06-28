@@ -2,7 +2,6 @@
 #include <sstream>     // Necessário para stringstream
 #include <stdexcept>   // Necessário para invalid_argument, out_of_range
 #include <iostream>    // Necessário para cerr
-
 using namespace std;
 
 // Construtor padrão

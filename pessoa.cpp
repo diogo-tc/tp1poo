@@ -2,7 +2,6 @@
 #include <sstream>     // Necessário para stringstream
 #include <stdexcept>   // Necessário para stod (para horasVoo)
 #include <iostream>
-
 using namespace std;
 
 // Implementação da classe Pessoa
