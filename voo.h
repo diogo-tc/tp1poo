@@ -3,68 +3,74 @@
 
 #include <string>
 #include <vector>
-#include "Aeronave.h"
-#include "Pessoa.h" // Inclui Piloto e Passageiro
-using namespace std; 
+
+// Forward declarations para evitar inclusões circulares e problemas de tipo
+// Voo não precisa conhecer os detalhes completos de Aeronave, Piloto, Passageiro
+// ele só precisa saber que esses tipos existem (para o construtor ou se tivesse ponteiros)
+// mas agora ele só guarda IDs (strings).
+// No entanto, para o fromCSV poder ser um "parser" completo, é bom ter.
+// Para este setup, a forward declaration é mais limpa.
+// class Aeronave;
+// class Piloto;
+// class Passageiro;
 
 class Voo {
 private:
-    string codigo;   
-    string origem;
-    string destino;
+    std::string codigo;
+    std::string origem;
+    std::string destino;
     double distancia; // em milhas
-    string horaSaida;
+    std::string horaSaida;
 
-    Aeronave* aeronave;
-    Piloto* comandante;
-    Piloto* primeiroOficial;
+    // Agora armazenamos APENAS os identificadores (IDs) como strings
+    std::string codigoAeronave;
+    std::string matriculaComandante;
+    std::string matriculaPrimeiroOficial;
 
     int numeroEscalas;
     double tempoEstimado; // em horas
 
-    vector<Passageiro*> passageiros;
+    std::vector<std::string> cpfsPassageiros; // Armazena apenas os CPFs dos passageiros
 
 public:
     Voo();
-    Voo(const string& codigo, const string& origem, const string& destino, double distancia, const string& horaSaida,
-        Aeronave* aeronave, Piloto* comandante, Piloto* primeiroOficial);
+    // Construtor agora recebe IDs como strings
+    Voo(const std::string& codigo, const std::string& origem, const std::string& destino, double distancia, const std::string& horaSaida,
+        const std::string& codigoAeronave, const std::string& matriculaComandante, const std::string& matriculaPrimeiroOficial);
 
-    string getCodigo() const;
-    void setCodigo(const string& codigo);
+    std::string getCodigo() const;
+    void setCodigo(const std::string& codigo);
 
-    string getOrigem() const;
-    void setOrigem(const string& origem);
+    std::string getOrigem() const;
+    void setOrigem(const std::string& origem);
 
-    string getDestino() const;
-    void setDestino(const string& destino);
+    std::string getDestino() const;
+    void setDestino(const std::string& destino);
 
     double getDistancia() const;
     void setDistancia(double distancia);
 
-    string getHoraSaida() const;
-    void setHoraSaida(const string& hora);
+    std::string getHoraSaida() const;
+    void setHoraSaida(const std::string& hora);
 
     int getNumeroEscalas() const;
     double getTempoEstimado() const;
 
-    Aeronave* getAeronave() const;
-    void setAeronave(Aeronave* aeronave);
+    // Novos getters para os IDs armazenados
+    const std::string& getCodigoAeronave() const;
+    const std::string& getMatriculaComandante() const;
+    const std::string& getMatriculaPrimeiroOficial() const;
+    const std::vector<std::string>& getCpfsPassageiros() const; // Para acesso aos CPFs
 
-    Piloto* getComandante() const;
-    void setComandante(Piloto* comandante);
+    // Agora adicionarPassageiro recebe CPF
+    bool adicionarPassageiro(const std::string& cpfPassageiro, int capacidadeAeronave); // Precisa da capacidade para verificar lotação
 
-    Piloto* getPrimeiroOficial() const;
-    void setPrimeiroOficial(Piloto* oficial);
+    // Calcular escalas e tempo agora precisa de informações da aeronave como parâmetros
+    void calcularEscalasETempo(double autonomiaAeronave, double velocidadeMediaAeronave);
 
-    const vector<Passageiro*>& getPassageiros() const;
-    bool adicionarPassageiro(Passageiro* passageiro);
-
-    void calcularEscalasETempo();
-
-    string toCSV() const;
-    static Voo fromCSV(const string& linha); // Nota: Esta função é um placeholder para o Systema
-
-    void listarPassageiros() const;
+    std::string toCSV() const;
+    // fromCSV agora só extrai as strings; a resolução de IDs será no Sistema::carregarDados
+    static Voo fromCSV(const std::string& linha);
 };
 
 #endif
