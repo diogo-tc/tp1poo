@@ -67,7 +67,7 @@ Aeronave Aeronave::fromCSV(const string& linha) {
     int capacidade;
     double velocidadeMedia, autonomia;
 
-    getline(ss, codigo, ','); 
+    getline(ss, codigo, ',');  
     getline(ss, modelo, ',');
     getline(ss, sCapacidade, ',');
     getline(ss, sVelocidadeMedia, ',');

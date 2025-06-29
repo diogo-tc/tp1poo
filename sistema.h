@@ -6,12 +6,13 @@
 #include "Aeronave.h"
 #include "Pessoa.h"
 #include "Voo.h"
+using namespace std; 
 
 class Sistema {
 private:
-    std::vector<Aeronave> aeronaves;
-    std::vector<Pessoa*> pessoas; // Pode conter Piloto* e Passageiro*
-    std::vector<Voo> voos;
+    vector<Aeronave> aeronaves;
+    vector<Pessoa*> pessoas; // Pode conter Piloto* e Passageiro*
+    vector<Voo> voos;
 
 public:
     Sistema();
@@ -24,11 +25,11 @@ public:
     void criarVoo(const Voo& voo); // Voo já virá com IDs, não ponteiros
 
     // Associações
-    bool embarcarPassageiro(const std::string& codigoVoo, const std::string& cpf);
+    bool embarcarPassageiro(const string& codigoVoo, const string& cpf);
 
     // Listagens
     void listarVoos() const;
-    void listarPassageirosDoVoo(const std::string& codigoVoo) const;
+    void listarPassageirosDoVoo(const string& codigoVoo) const;
 
     // Persistência
     void salvarDados() const;
@@ -36,16 +37,16 @@ public:
 
     // Buscas internas (retornam ponteiros para objetos gerenciados pelo Sistema)
     // Versão não-const (para modificação)
-    Aeronave* buscarAeronave(const std::string& codigo);
-    Piloto* buscarPiloto(const std::string& matricula);
-    Passageiro* buscarPassageiro(const std::string& cpf);
-    Voo* buscarVoo(const std::string& codigo); // Retorna Voo* para poder adicionar passageiros
+    Aeronave* buscarAeronave(const string& codigo);
+    Piloto* buscarPiloto(const string& matricula);
+    Passageiro* buscarPassageiro(const string& cpf);
+    Voo* buscarVoo(const string& codigo); // Retorna Voo* para poder adicionar passageiros
 
     // Versão const (para acesso somente leitura)
-    const Aeronave* buscarAeronave(const std::string& codigo) const;
-    const Piloto* buscarPiloto(const std::string& matricula) const;
-    const Passageiro* buscarPassageiro(const std::string& cpf) const;
-    const Voo* buscarVoo(const std::string& codigo) const;
+    const Aeronave* buscarAeronave(const string& codigo) const;
+    const Piloto* buscarPiloto(const string& matricula) const;
+    const Passageiro* buscarPassageiro(const string& cpf) const;
+    const Voo* buscarVoo(const string& codigo) const;
 };
 
 #endif
