@@ -103,7 +103,7 @@ string Passageiro::toCSV() const {
     return ss.str();
 }
 
-Passageiro Passageiro::fromCSV(const string& linha) {
+Passageiro Passageiro::fromCSV(const string& linha) { 
     stringstream ss(linha);
     string tipo, nome, cpf, bilhete;
 

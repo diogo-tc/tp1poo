@@ -62,6 +62,6 @@ public:
     string toCSV() const override;
     static Passageiro fromCSV(const string& linha);
 };
-
+ 
 #endif
 
