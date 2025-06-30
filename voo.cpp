@@ -2,7 +2,7 @@
 #include <sstream>
 #include <iostream>
 #include <stdexcept> // Para stod
-using namespace std; 
+using namespace std;  
 
 // Construtor padrão
 Voo::Voo() : distancia(0.0), numeroEscalas(0), tempoEstimado(0.0) {}

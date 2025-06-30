@@ -5,7 +5,7 @@
 #include <vector>
 using namespace std; 
 
-
+ 
 class Voo {
 private:
     string codigo;

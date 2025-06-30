@@ -172,8 +172,7 @@ void Sistema::salvarDados() const {
             arqAeronaves << a.toCSV() << endl;
         }
         arqAeronaves.close();
-        cout << "Aeronaves salvas em aeronaves.csv" << endl;
-    } else {
+        } else {
         cerr << "Erro ao abrir aeronaves.csv para escrita." << endl;
     }
 
@@ -183,9 +182,8 @@ void Sistema::salvarDados() const {
             arqPessoas << p->toCSV() << endl;
         }
         arqPessoas.close();
-        cout << "Pessoas salvas em pessoas.csv" << endl;
     } else {
-        cerr << "Erro ao abrir pessoas.csv para escrita." << endl;
+        cerr << "Erro ao abrir pessoas.csv para escrita." << endl; 
     }
 
     // Salvando voos com seus passageiros associados na mesma linha
@@ -195,8 +193,7 @@ void Sistema::salvarDados() const {
             arqVoos << v.toCSV() << endl; // O Voo::toCSV() agora inclui os CPFs
         }
         arqVoos.close();
-        cout << "Voos (com passageiros) salvos em voos.csv" << endl;
-    } else {
+       } else {
         cerr << "Erro ao abrir voos.csv para escrita." << endl;
     }
 }

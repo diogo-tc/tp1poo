@@ -9,7 +9,7 @@ class Pessoa {
 protected:
     string nome;
 
-public:
+public: 
     Pessoa();
     Pessoa(const string& nome);
 

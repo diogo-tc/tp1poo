@@ -65,7 +65,7 @@ Piloto Piloto::fromCSV(const string& linha) {
     getline(ss, sHorasVoo); // Lê as horas de voo até o final da linha
 
     try {
-        horasVoo = stod(sHorasVoo);
+        horasVoo = stod(sHorasVoo); 
     } catch (const invalid_argument& e) {
         cerr << "Erro de conversão de horas de voo para Piloto do CSV: " << e.what() << endl;
     } catch (const out_of_range& e) {
