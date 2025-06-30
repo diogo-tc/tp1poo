@@ -92,4 +92,4 @@ Aeronave Aeronave::fromCSV(const string& linha) {
 
     return Aeronave(codigo, modelo, capacidade, velocidadeMedia, autonomia);
 }
-
+//
