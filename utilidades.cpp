@@ -1,7 +1,7 @@
 #include "utilidades.h"
 #include <iostream>
 #include <limits> // Para numeric_limits
-using namespace std;  
+using namespace std;   
 
 // Implementações das funções auxiliares de entrada
 void limparBuffer() {

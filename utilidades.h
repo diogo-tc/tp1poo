@@ -2,7 +2,7 @@
 #define UTILIDADES_H
 
 #include <string>
-#include "Sistema.h" 
+#include "Sistema.h"  
 using namespace std; 
 
 // Funções auxiliares para entrada de dados

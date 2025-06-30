@@ -12,7 +12,7 @@ Aeronave::Aeronave(const string& codigo, const string& modelo, int capacidade, d
     : codigo(codigo), modelo(modelo), capacidade(capacidade), velocidadeMedia(velocidadeMedia), autonomia(autonomia) {}
 
 // Getters
-string Aeronave::getCodigo() const {
+string Aeronave::getCodigo() const {  
     return codigo;
 }
 
