@@ -7,14 +7,12 @@ using namespace std;
 // Construtor padrão
 Voo::Voo() : distancia(0.0), numeroEscalas(0), tempoEstimado(0.0) {}
 
-// Construtor com parâmetros - agora recebe IDs como strings
+// Construtor com parâmetros 
 Voo::Voo(const string& codigo, const string& origem, const string& destino, double distancia, const string& horaSaida,
          const string& codigoAeronave, const string& matriculaComandante, const string& matriculaPrimeiroOficial)
     : codigo(codigo), origem(origem), destino(destino), distancia(distancia), horaSaida(horaSaida),
       codigoAeronave(codigoAeronave), matriculaComandante(matriculaComandante), matriculaPrimeiroOficial(matriculaPrimeiroOficial),
       numeroEscalas(0), tempoEstimado(0.0) {
-    // Note: calcularEscalasETempo não pode ser chamado aqui sem os dados da Aeronave
-    // O Sistema terá que chamar isso após resolver a Aeronave
 }
 
 // Getters e Setters
@@ -67,7 +65,7 @@ double Voo::getTempoEstimado() const {
     return tempoEstimado;
 }
 
-// Novos getters para os IDs armazenados
+//getters para os IDs armazenados
 const string& Voo::getCodigoAeronave() const {
     return codigoAeronave;
 }
@@ -84,14 +82,13 @@ const vector<string>& Voo::getCpfsPassageiros() const {
     return cpfsPassageiros;
 }
 
-// Método adicionarPassageiro agora recebe apenas o CPF e a capacidade da aeronave
+// Método adicionarPassageiro recebe apenas o CPF e a capacidade da aeronave
 bool Voo::adicionarPassageiro(const string& cpfPassageiro, int capacidadeAeronave) {
     // Verificar se a aeronave tem capacidade para mais passageiros
     if (cpfsPassageiros.size() < static_cast<size_t>(capacidadeAeronave)) {
         // Verificar se o passageiro já está no voo
         for (const auto& cpf : cpfsPassageiros) {
             if (cpf == cpfPassageiro) {
-                // cout << "Passageiro com CPF " << cpfPassageiro << " já está neste voo." << endl;
                 return false; // Passageiro já está na lista
             }
         }
@@ -101,7 +98,7 @@ bool Voo::adicionarPassageiro(const string& cpfPassageiro, int capacidadeAeronav
     return false; // Capacidade máxima atingida
 }
 
-// Lógica de cálculo de tempo e escalas, agora com parâmetros da aeronave
+// Lógica de cálculo de tempo e escalas com parâmetros da aeronave
 void Voo::calcularEscalasETempo(double autonomiaAeronave, double velocidadeMediaAeronave) {
     // Calcular número de escalas com base na distância do voo e na autonomia da Aeronave
     if (autonomiaAeronave > 0) {
@@ -119,7 +116,7 @@ void Voo::calcularEscalasETempo(double autonomiaAeronave, double velocidadeMedia
     tempoEstimado += (numeroEscalas * 1.0); // cada escala leva 1 hora
 }
 
-// toCSV: Agora serializa IDs para aeronave e pilotos, e CPFs para passageiros
+// serializa IDs para aeronave e pilotos, e CPFs para passageiros
 string Voo::toCSV() const {
     stringstream ss;
     ss << codigo << ","
@@ -142,7 +139,7 @@ string Voo::toCSV() const {
     return ss.str();
 }
 
-// fromCSV: Apenas extrai as strings da linha CSV. A resolução para objetos reais será no Sistema.
+// extrai as strings da linha CSV. 
 Voo Voo::fromCSV(const string& linha) {
     stringstream ss(linha);
     string codigo, origem, destino, horaSaida, sDistancia;

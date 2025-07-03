@@ -14,7 +14,7 @@ private:
     double distancia; // em milhas
     string horaSaida;
 
-    // Agora armazenamos APENAS os identificadores (IDs) como strings
+    // armazenama APENAS os identificadores (IDs) como strings
     string codigoAeronave;
     string matriculaComandante;
     string matriculaPrimeiroOficial;
@@ -26,7 +26,7 @@ private:
 
 public:
     Voo();
-    // Construtor agora recebe IDs como strings
+    // Construtor recebe IDs como strings
     Voo(const string& codigo, const string& origem, const string& destino, double distancia, const string& horaSaida,
         const string& codigoAeronave, const string& matriculaComandante, const string& matriculaPrimeiroOficial);
 
@@ -54,10 +54,10 @@ public:
     const string& getMatriculaPrimeiroOficial() const;
     const vector<string>& getCpfsPassageiros() const; // Para acesso aos CPFs
 
-    // Agora adicionarPassageiro recebe CPF
+    // adicionarPassageiro recebe CPF
     bool adicionarPassageiro(const string& cpfPassageiro, int capacidadeAeronave); // Precisa da capacidade para verificar lotação
 
-    // Calcular escalas e tempo agora precisa de informações da aeronave como parâmetros
+    // Calcular escalas e tempo 
     void calcularEscalasETempo(double autonomiaAeronave, double velocidadeMediaAeronave);
 
     string toCSV() const;

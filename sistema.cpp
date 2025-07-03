@@ -118,7 +118,7 @@ void Sistema::listarVoos() const {
 
         cout << "  Origem: " << voo.getOrigem() << endl;
         cout << "  Destino: " << voo.getDestino() << endl;
-        cout << "  Número de Passageiros: " << voo.getCpfsPassageiros().size() << endl; // Agora pega do vetor de CPFs
+        cout << "  Número de Passageiros: " << voo.getCpfsPassageiros().size() << endl; 
         cout << "  Hora de Saída Prevista: " << voo.getHoraSaida() << endl;
 
         // Usa aeronave para listar o tempo e escalas

@@ -22,7 +22,7 @@ public:
     void cadastrarAeronave(const Aeronave& aeronave);
     void cadastrarPiloto(const Piloto& piloto);
     void cadastrarPassageiro(const Passageiro& passageiro);
-    void criarVoo(const Voo& voo); // Voo já virá com IDs, não ponteiros
+    void criarVoo(const Voo& voo); 
 
     // Associações
     bool embarcarPassageiro(const string& codigoVoo, const string& cpf);
