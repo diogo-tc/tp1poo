@@ -11,6 +11,7 @@ Este projeto é um sistema de controle de voos desenvolvido em C++ para gerencia
 - `voo.cpp`, `voo.h` — Gerenciamento de voos.
 - `utilidades.cpp`, `utilidades.h` — Funções auxiliares e de interface.
 - Arquivos `.csv` — Persistência dos dados.
+- Todos os arquivos `.h` estão declarados dentro da pasta include, facilitando manutenção
 
 ## Compilação
 
