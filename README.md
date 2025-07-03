@@ -40,5 +40,7 @@ Os dados são salvos automaticamente nos arquivos .csv correspondentes.
 
 Observações:
 
+O arquivo voos.csv não deve ser importado manualmente, pois depende da união dos dados contidos nos arquivos pessoas.csv e aeronaves.csv. Portanto, ele deve ser gerado dinamicamente durante a execução do programa.
+
 Certifique-se de que os arquivos aeronaves.csv, pessoas.csv e voos.csv estejam na mesma pasta do executável para persistência dos dados.
 O sistema carrega os dados automaticamente ao iniciar, se os arquivos existirem.
