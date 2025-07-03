@@ -61,7 +61,7 @@ public:
     void calcularEscalasETempo(double autonomiaAeronave, double velocidadeMediaAeronave);
 
     string toCSV() const;
-    // fromCSV agora só extrai as strings; a resolução de IDs será no Sistema::carregarDados
+    // fromCSV extrai as strings; a resolução de IDs será no Sistema::carregarDados
     static Voo fromCSV(const string& linha);
 };
 

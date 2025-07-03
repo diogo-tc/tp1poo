@@ -3,9 +3,9 @@
 
 #include <vector>
 #include <string>
-#include "Aeronave.h"
-#include "Pessoa.h" 
-#include "Voo.h"
+#include "aeronave.h"
+#include "pessoa.h" 
+#include "voo.h"
 using namespace std; 
 
 class Sistema {
@@ -15,7 +15,7 @@ private:
     vector<Voo> voos;
 
 public:
-    Sistema();
+    Sistema() {}
     ~Sistema(); // Destrutor para liberar memória de Pessoa*
 
     // Cadastro

@@ -1,6 +1,6 @@
 #include <iostream>
-#include "Sistema.h"
-#include "utilidades.h" 
+#include "include/sistema.h"
+#include "include/utilidades.h" 
 using namespace std;
 
 int main() {

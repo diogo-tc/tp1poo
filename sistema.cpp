@@ -1,4 +1,4 @@
-#include "Sistema.h"
+#include "include/sistema.h"
 #include <fstream>
 #include <iostream>
 #include <algorithm>
@@ -9,10 +9,6 @@
 #include <sstream>
 using namespace std; 
 
-// Construtor
-Sistema::Sistema() {
-    // Inicialização, se necessário
-}
 
 // Destrutor para liberar a memória alocada para Pessoa*
 Sistema::~Sistema() {
@@ -55,13 +51,13 @@ void Sistema::criarVoo(const Voo& voo) {
         cout << "Erro: Voo com código " << voo.getCodigo() << " já existe." << endl;
         return;
     }
-    voos.push_back(voo); // Voo já virá com os IDs da main
+    voos.push_back(voo); // Voo virá com os IDs da main
     cout << "Voo " << voo.getCodigo() << " criado com sucesso." << endl;
 }
 
 bool Sistema::embarcarPassageiro(const string& codigoVoo, const string& cpf) {
-    Voo* voo = buscarVoo(codigoVoo); // Pega o Voo (não-const) para modificá-lo
-    Passageiro* passageiro = buscarPassageiro(cpf); // Pega o Passageiro (não-const) para verificar existência
+    Voo* voo = buscarVoo(codigoVoo); // Pega o Voo para modificá-lo
+    Passageiro* passageiro = buscarPassageiro(cpf); // Pega o Passageiro para verificar existência
 
     if (!voo) {
         cout << "Erro: Voo com código " << codigoVoo << " não encontrado." << endl;
@@ -80,7 +76,7 @@ bool Sistema::embarcarPassageiro(const string& codigoVoo, const string& cpf) {
         return false;
     }
 
-    // Agora, chamar adicionarPassageiro do Voo com o CPF e a capacidade da aeronave
+    //chamaa adicionarPassageiro do Voo com o CPF e a capacidade da aeronave
     if (voo->adicionarPassageiro(cpf, aeronaveAssociada->getCapacidade())) {
         cout << "Passageiro " << passageiro->getNome() << " embarcado no voo " << voo->getCodigo() << " com sucesso." << endl;
         return true;
@@ -125,7 +121,7 @@ void Sistema::listarVoos() const {
         cout << "  Número de Passageiros: " << voo.getCpfsPassageiros().size() << endl; // Agora pega do vetor de CPFs
         cout << "  Hora de Saída Prevista: " << voo.getHoraSaida() << endl;
 
-        // Para listar o tempo e escalas, precisamos da aeronave (const)
+        // Usa aeronave para listar o tempo e escalas
         if (aeronave) {
             // Chamando a função de Voo com os parâmetros necessários
             Voo tempVoo = voo; // Cria uma cópia temporária mutável se a função não for const
@@ -192,7 +188,7 @@ void Sistema::salvarDados() const {
     ofstream arqVoos("voos.csv");
     if (arqVoos.is_open()) {
         for (const auto& v : voos) {
-            arqVoos << v.toCSV() << endl; // O Voo::toCSV() agora inclui os CPFs
+            arqVoos << v.toCSV() << endl; // O Voo::toCSV() inclui os CPFs
         }
         arqVoos.close();
        } else {
@@ -245,22 +241,18 @@ void Sistema::carregarDados() {
     if (arqVoos.is_open()) {
         string linha;
         while (getline(arqVoos, linha)) {
-            Voo carregadoVoo = Voo::fromCSV(linha); // fromCSV de Voo agora retorna um Voo com IDs e CPFs preenchidos
+            Voo carregadoVoo = Voo::fromCSV(linha); // fromCSV de Voo retorna um Voo com IDs e CPFs preenchidos
 
-            // Agora, vamos resolver os IDs para ponteiros reais e calcular escalas/tempo
+            //Resolve os IDs para ponteiros reais e calcular escalas/tempo
             Aeronave* a = buscarAeronave(carregadoVoo.getCodigoAeronave());
             Piloto* c = buscarPiloto(carregadoVoo.getMatriculaComandante());
             Piloto* po = buscarPiloto(carregadoVoo.getMatriculaPrimeiroOficial());
 
             if (a && c && po) {
-                // Se o Voo::fromCSV retornasse ponteiros (como antes),
-                // teríamos que setar aqui: carregadoVoo.setAeronave(a); etc.
-                // Mas como ele não armazena mais ponteiros, os dados já estão ali.
-
-                // Calculamos as escalas e tempo AQUI, pois precisamos da Aeronave real
+                // Calcula as escalas e tempo aqui, pois precisamos da Aeronave real
                 carregadoVoo.calcularEscalasETempo(a->getAutonomia(), a->getVelocidadeMedia());
 
-                // Adicionamos os CPFs dos passageiros ao voo, usando buscarPassageiro
+                // Adiciona os CPFs dos passageiros ao voo, usando buscarPassageiro
                 // e a função adicionarPassageiro que espera CPF e capacidade
                 for (const string& cpf : carregadoVoo.getCpfsPassageiros()) {
                     Passageiro* p = buscarPassageiro(cpf);
