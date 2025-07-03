@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <string>
 #include <limits>
+#include <map>
+#include <iomanip>
 #include <sstream>
 using namespace std; 
 
@@ -356,4 +358,96 @@ const Voo* Sistema::buscarVoo(const string& codigo) const {
         }
     }
     return nullptr;
+}
+
+// Número total de voos cadastrados
+string Sistema::relatorioTotalVoos() const {
+    stringstream ss;
+    ss << "Número total de voos cadastrados: " << voos.size() << endl;
+    return ss.str();
+}
+
+// Média de passageiros por voo
+string Sistema::relatorioMediaPassageirosPorVoo() const {
+    stringstream ss;
+    if (voos.empty()) {
+        ss << "Nenhum voo cadastrado.\n";
+        return ss.str();
+    }
+    size_t total = 0;
+    for (const auto& v : voos) total += v.getCpfsPassageiros().size();
+    double media = static_cast<double>(total) / voos.size();
+    ss << fixed << setprecision(2);
+    ss << "Média de passageiros por voo: " << media << endl;
+    return ss.str();
+}
+
+// Lista de aeronaves mais utilizadas
+string Sistema::relatorioAeronavesMaisUtilizadas() const {
+    stringstream ss;
+    map<string, int> uso;
+    for (const auto& v : voos) uso[v.getCodigoAeronave()]++;
+    int maxUso = 0;
+    for (const auto& par : uso) if (par.second > maxUso) maxUso = par.second;
+    ss << "Aeronaves mais utilizadas:\n";
+    for (const auto& par : uso) {
+        if (par.second == maxUso) {
+            const Aeronave* a = buscarAeronave(par.first);
+            ss << "- " << (a ? a->getModelo() : "Desconhecida") << " (Código: " << par.first << "), " << par.second << " voos\n";
+        }
+    }
+    return ss.str();
+}
+
+// Passageiros que participaram de mais de um voo
+string Sistema::relatorioPassageirosMaisDeUmVoo() const {
+    stringstream ss;
+    map<string, int> contagem;
+    for (const auto& v : voos)
+        for (const auto& cpf : v.getCpfsPassageiros())
+            contagem[cpf]++;
+    ss << "Passageiros que participaram de mais de um voo:\n";
+    bool achou = false;
+    for (const auto& par : contagem) {
+        if (par.second > 1) {
+            const Passageiro* p = buscarPassageiro(par.first);
+            ss << "- " << (p ? p->getNome() : "Desconhecido") << " (CPF: " << par.first << "), " << par.second << " voos\n";
+            achou = true;
+        }
+    }
+    if (!achou) ss << "Nenhum passageiro participou de mais de um voo.\n";
+    return ss.str();
+}
+
+// Voos que atingiram pelo menos 90% da capacidade máxima
+string Sistema::relatorioVoos90PorcentoCapacidade() const {
+    stringstream ss;
+    ss << "Voos que atingiram pelo menos 90% da capacidade máxima:\n";
+    bool achou = false;
+    for (const auto& v : voos) {
+        const Aeronave* a = buscarAeronave(v.getCodigoAeronave());
+        if (a && a->getCapacidade() > 0) {
+            double ocup = (double)v.getCpfsPassageiros().size() / a->getCapacidade();
+            if (ocup >= 0.9) {
+                ss << "- Voo " << v.getCodigo() << " (" << v.getCpfsPassageiros().size() << "/" << a->getCapacidade() << ")\n";
+                achou = true;
+            }
+        }
+    }
+    if (!achou) ss << "Nenhum voo atingiu 90% da capacidade.\n";
+    return ss.str();
+}
+
+// Distância total percorrida por cada aeronave
+string Sistema::relatorioDistanciaPorAeronave() const {
+    stringstream ss;
+    map<string, double> dist;
+    for (const auto& v : voos)
+        dist[v.getCodigoAeronave()] += v.getDistancia();
+    ss << "Distância total percorrida por cada aeronave:\n";
+    for (const auto& par : dist) {
+        const Aeronave* a = buscarAeronave(par.first);
+        ss << "- " << (a ? a->getModelo() : "Desconhecida") << " (Código: " << par.first << "): " << fixed << setprecision(2) << par.second << " milhas\n";
+    }
+    return ss.str();
 }

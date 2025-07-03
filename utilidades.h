@@ -21,5 +21,6 @@ void processarCadastrarPassageiro(Sistema& meuSistema);
 void processarCriarVoo(Sistema& meuSistema);
 void processarEmbarcarPassageiro(Sistema& meuSistema);
 void processarListarPassageirosDoVoo(Sistema& meuSistema);
+void processarRelatoriosEstatisticas(Sistema& meuSistema);
 
 #endif // UTILIDADES_H

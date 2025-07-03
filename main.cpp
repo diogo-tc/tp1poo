@@ -35,6 +35,9 @@ int main() {
                 processarListarPassageirosDoVoo(meuSistema); 
                 break;
             case 8:
+                processarRelatoriosEstatisticas(meuSistema);
+                break;
+            case 9:
                 meuSistema.salvarDados();
                 cout << "Dados salvos. Encerrando o sistema." << endl;
                 break;
@@ -42,7 +45,7 @@ int main() {
                 cout << "Opção inválida. Tente novamente." << endl;
                 break;
         }
-    } while (opcao != 8);
+    } while (opcao != 9);
 
     return 0;
 }

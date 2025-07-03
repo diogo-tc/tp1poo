@@ -47,6 +47,13 @@ public:
     const Piloto* buscarPiloto(const string& matricula) const;
     const Passageiro* buscarPassageiro(const string& cpf) const;
     const Voo* buscarVoo(const string& codigo) const;
+    // Relatórios estatísticos
+    string relatorioTotalVoos() const;
+    string relatorioMediaPassageirosPorVoo() const;
+    string relatorioAeronavesMaisUtilizadas() const;
+    string relatorioPassageirosMaisDeUmVoo() const;
+    string relatorioVoos90PorcentoCapacidade() const;
+    string relatorioDistanciaPorAeronave() const;
 };
 
 #endif

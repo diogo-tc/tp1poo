@@ -49,7 +49,8 @@ void exibirMenu() {
     cout << "5. Embarcar passageiro em voo" << endl;
     cout << "6. Listar voos" << endl;
     cout << "7. Listar passageiros de um voo" << endl;
-    cout << "8. Salvar dados e sair" << endl;
+    cout << "8. Relatórios e Estatísticas" << endl; 
+    cout << "9. Salvar dados e sair" << endl;
     cout << "===========================================" << endl;
     cout << "Escolha uma opção: ";
 }
@@ -143,4 +144,74 @@ void processarListarPassageirosDoVoo(Sistema& meuSistema) {
     cout << "--- LISTAR PASSAGEIROS DE VOO ---" << endl;
     string codigoVoo = obterString("Digite o código do voo: ");
     meuSistema.listarPassageirosDoVoo(codigoVoo);
+}
+
+#include <fstream>
+
+void exibirSubmenuRelatorios() {
+    cout << "\n======= RELATÓRIOS E ESTATÍSTICAS =======" << endl;
+    cout << "1. Número total de voos cadastrados" << endl;
+    cout << "2. Média de passageiros por voo" << endl;
+    cout << "3. Lista de aeronaves mais utilizadas" << endl;
+    cout << "4. Passageiros que participaram de mais de um voo" << endl;
+    cout << "5. Voos que atingiram pelo menos 90% da capacidade máxima" << endl;
+    cout << "6. Distância total percorrida por cada aeronave" << endl;
+    cout << "7. Voltar ao menu principal" << endl;
+    cout << "=========================================" << endl;
+    cout << "Escolha uma opção: ";
+}
+
+void salvarRelatorio(const string& conteudo, const string& nomeArquivo) {
+    ofstream arq(nomeArquivo);
+    if (arq.is_open()) {
+        arq << conteudo;
+        arq.close();
+        cout << "Relatório salvo em " << nomeArquivo << endl;
+    } else {
+        cout << "Erro ao salvar o relatório." << endl;
+    }
+}
+
+void processarRelatoriosEstatisticas(Sistema& meuSistema) {
+    int opcao;
+    do {
+        exibirSubmenuRelatorios();
+        opcao = obterInt("");
+        string relatorio;
+        switch (opcao) {
+            case 1:
+                relatorio = meuSistema.relatorioTotalVoos();
+                cout << relatorio;
+                break;
+            case 2:
+                relatorio = meuSistema.relatorioMediaPassageirosPorVoo();
+                cout << relatorio;
+                break;
+            case 3:
+                relatorio = meuSistema.relatorioAeronavesMaisUtilizadas();
+                cout << relatorio;
+                break;
+            case 4:
+                relatorio = meuSistema.relatorioPassageirosMaisDeUmVoo();
+                cout << relatorio;
+                break;
+            case 5:
+                relatorio = meuSistema.relatorioVoos90PorcentoCapacidade();
+                cout << relatorio;
+                break;
+            case 6:
+                relatorio = meuSistema.relatorioDistanciaPorAeronave();
+                cout << relatorio;
+                break;
+            case 7:
+                break;
+        }
+        if (opcao >= 1 && opcao <= 6) {
+            string salvar = obterString("Deseja salvar este relatório em um arquivo .txt? (s/n): ");
+            if (salvar == "s" || salvar == "S") {
+                string nomeArquivo = obterString("Nome do arquivo (ex: relatorio.txt): ");
+                salvarRelatorio(relatorio, nomeArquivo);
+            }
+        }
+    } while (opcao != 7);
 }
