@@ -130,7 +130,7 @@ void Sistema::listarVoos() const {
             // Chamando a função de Voo com os parâmetros necessários
             Voo tempVoo = voo; // Cria uma cópia temporária mutável se a função não for const
             tempVoo.calcularEscalasETempo(aeronave->getAutonomia(), aeronave->getVelocidadeMedia());
-            cout << "  Tempo Estimado de Voo: " << tempVoo.getTempoEstimado() << " horas (incluindo " << tempVoo.getNumeroEscalas() << " escalas)" << endl;
+            cout << "  Tempo Estimado de Voo: " << fixed << setprecision(2) << tempVoo.getTempoEstimado() << " horas (incluindo " << tempVoo.getNumeroEscalas() << " escalas)" << endl;
         } else {
             cout << "  Tempo Estimado de Voo: N/A (Aeronave não encontrada)" << endl;
         }
